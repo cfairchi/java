@@ -6,7 +6,8 @@ import java.util.List;
 public enum PlatformType {
     UNKNOWN("Unknown", 0),
     SATELLITE("Satellite", 1),
-    SENSOR("Sensor", 2);
+    SENSOR("Sensor", 2),
+    FACILITY("Facility", 3);
 
     private final String displayName;
     private final Integer order;

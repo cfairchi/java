@@ -29,4 +29,5 @@ public class Tle {
         return sscNum;
     }
 
+    public String getTLEString() { return line1 + "\n" + line2; }
 }

@@ -7,6 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="AgiComponents2021r1" level="application" />
+    <orderEntry type="library" name="AgiComponents_2020r1" level="project" />
   </component>
 </module>
