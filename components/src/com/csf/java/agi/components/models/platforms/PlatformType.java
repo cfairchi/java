@@ -1,4 +1,4 @@
-package com.csf.java.agi.components.models;
+package com.csf.java.agi.components.models.platforms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,8 @@ public enum PlatformType {
     UNKNOWN("Unknown", 0),
     SATELLITE("Satellite", 1),
     SENSOR("Sensor", 2),
-    FACILITY("Facility", 3);
+    ANTENNA("Antenna", 3),
+    FACILITY("Facility", 4);
 
     private final String displayName;
     private final Integer order;

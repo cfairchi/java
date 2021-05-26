@@ -1,24 +1,16 @@
-package com.csf.java.agi.components.models;
+package com.csf.java.agi.components.models.platforms;
 
 import agi.foundation.Trig;
 import agi.foundation.access.LinkInstantaneous;
 import agi.foundation.access.LinkRole;
 import agi.foundation.celestial.CentralBodiesFacet;
 import agi.foundation.celestial.EarthCentralBody;
-import agi.foundation.cesium.*;
-import agi.foundation.cesium.advanced.IMaterialGraphics;
 import agi.foundation.coordinates.AxisIndicator;
 import agi.foundation.coordinates.Cartesian;
 import agi.foundation.geometry.*;
-import agi.foundation.geometry.shapes.ComplexConic;
-import agi.foundation.geometry.shapes.CustomSensorPattern;
-import agi.foundation.geometry.shapes.RectangularPyramid;
-import agi.foundation.infrastructure.IdentifierExtension;
-import agi.foundation.platforms.FieldOfViewExtension;
 import agi.foundation.platforms.Platform;
-
-import java.awt.*;
-import java.util.Optional;
+import com.csf.java.agi.components.models.platforms.CustomPlatform;
+import com.csf.java.agi.components.models.platforms.PlatformType;
 
 /**
  * This class extends the Platform object to provide an easy to use implementation of a Sensor

@@ -1,14 +1,7 @@
-package com.csf.java.agi.components.models;
+package com.csf.java.agi.components.models.platforms;
 
 import agi.foundation.MotionEvaluator1;
-import agi.foundation.celestial.CentralBodiesFacet;
-import agi.foundation.celestial.EarthCentralBody;
-import agi.foundation.cesium.*;
 import agi.foundation.propagators.CartesianOnePointPropagator;
-import com.google.common.collect.ImmutableMap;
-
-import java.awt.*;
-import java.util.HashMap;
 
 public abstract class PropagatedPlatform extends CustomPlatform {
     protected MotionEvaluator1 pointEvaluator = null;

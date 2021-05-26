@@ -1,4 +1,4 @@
-package com.csf.java.agi.components.models;
+package com.csf.java.agi.components.models.platforms;
 
 import agi.foundation.cesium.*;
 import agi.foundation.cesium.advanced.IPolylineMaterialGraphics;

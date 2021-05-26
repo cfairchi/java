@@ -4,8 +4,8 @@ import agi.foundation.access.*;
 import agi.foundation.access.constraints.CentralBodyObstructionConstraint;
 import agi.foundation.propagators.TwoLineElementSet;
 import agi.foundation.time.JulianDate;
-import com.csf.java.agi.components.models.FacilityPlatform;
-import com.csf.java.agi.components.models.SatellitePlatform;
+import com.csf.java.agi.components.models.platforms.FacilityPlatform;
+import com.csf.java.agi.components.models.platforms.SatellitePlatform;
 
 public class Access {
     public static AccessQueryResult calculateAccess(TwoLineElementSet tleSet, double latDeg, double lonDeg, double altMeters) {

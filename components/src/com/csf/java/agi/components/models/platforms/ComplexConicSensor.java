@@ -1,4 +1,4 @@
-package com.csf.java.agi.components.models;
+package com.csf.java.agi.components.models.platforms;
 
 import agi.foundation.Trig;
 import agi.foundation.cesium.*;
