@@ -8,7 +8,8 @@ public enum PlatformType {
     SATELLITE("Satellite", 1),
     SENSOR("Sensor", 2),
     ANTENNA("Antenna", 3),
-    FACILITY("Facility", 4);
+    FACILITY("Facility", 4),
+    COMMS_PLATFORM("CommsPlatform", 3);
 
     private final String displayName;
     private final Integer order;

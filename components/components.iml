@@ -8,6 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="AgiComponents_2020r1" level="project" />
-    <orderEntry type="module" module-name="guava" exported="" />
+    <orderEntry type="library" exported="" name="com.google.guava:guava:18.0" level="project" />
   </component>
 </module>

@@ -6,8 +6,10 @@ import agi.foundation.TypeLiteral;
 import agi.foundation.access.LinkInstantaneous;
 import agi.foundation.cesium.*;
 import agi.foundation.cesium.advanced.CesiumProperty;
+import agi.foundation.cesium.advanced.IMaterialGraphics;
 import agi.foundation.coordinates.Rectangular;
 import agi.foundation.geometry.shapes.ComplexConic;
+import agi.foundation.geometry.shapes.RectangularPyramid;
 import agi.foundation.geometry.shapes.SensorFieldOfView;
 import agi.foundation.infrastructure.CopyContext;
 import agi.foundation.infrastructure.ExtensibleObject;
@@ -18,7 +20,6 @@ import agi.foundation.platforms.FieldOfViewExtension;
 import agi.foundation.platforms.Platform;
 import agi.foundation.time.Duration;
 import agi.foundation.time.TimeIntervalCollection1;
-
 import com.csf.java.agi.components.models.platforms.Antenna;
 import com.google.common.collect.ImmutableSet;
 
@@ -290,8 +291,7 @@ public class ExtensionGenerator {
         fov.setRadius(projectionRangeMeters);
         extensibleObject.getExtensions().add(new FieldOfViewExtension(fov));
 
-        FieldOfViewGraphicsExtension fovGraphicsExtension =
-                generateFovGraphicsExtension(fillColor, show);
+        FieldOfViewGraphicsExtension fovGraphicsExtension = generateFovGraphicsExtension(fillColor, show);
 
         extensibleObject.getExtensions().add(fovGraphicsExtension);
     }
@@ -418,17 +418,54 @@ public class ExtensionGenerator {
         return obsPlatforms;
     }
 
-    private static FieldOfViewGraphicsExtension generateFovGraphicsExtension(
-            Color color, boolean show) {
-        SensorFieldOfViewGraphics fovGraphics = new SensorFieldOfViewGraphics();
-
-        // Hides the surface of the sphere/radius projecting outward.
-        fovGraphics.setShowDomeSurfaces(new ConstantCesiumProperty<>(false));
-
-        // Sets the lateral surface material graphics.
-        SolidColorMaterialGraphics lateralSurfaceMaterial = new SolidColorMaterialGraphics(color);
-        fovGraphics.setLateralSurfaceMaterial(new ConstantCesiumProperty<>(lateralSurfaceMaterial));
-        fovGraphics.setShow(new ConstantCesiumProperty<>(show));
-        return new FieldOfViewGraphicsExtension(fovGraphics);
+    public static void addRectangularFovExtension(
+            ExtensibleObject extensibleObject,
+            double theVerticalInTrackDeg,
+            double theHorizontalCrossTrackDeg) {
+        RectangularPyramid fov = new RectangularPyramid(Trig.degreesToRadians(theVerticalInTrackDeg),
+                                                        Trig.degreesToRadians(theHorizontalCrossTrackDeg));
+        extensibleObject.getExtensions().add(new FieldOfViewExtension(fov));
     }
+
+    public static void addComplexConicFovExtension(
+            ExtensibleObject extensibleObject,
+            double theInnerHalfAngle,
+            double theOuterHalfAngle,
+            double theMinClockAngle,
+            double theMaxClockAngle) {
+        ComplexConic sensorShape = new ComplexConic(
+                Trig.degreesToRadians(theInnerHalfAngle), Trig.degreesToRadians(theOuterHalfAngle),
+                Trig.degreesToRadians(theMinClockAngle), Trig.degreesToRadians(theMaxClockAngle));
+        extensibleObject.getExtensions().add(new FieldOfViewExtension(sensorShape));
+    }
+
+
+    private static FieldOfViewGraphicsExtension generateFovGraphicsExtension(Color theColor, boolean show) {
+        SensorFieldOfViewGraphics sensorFovGfx = new SensorFieldOfViewGraphics();
+        sensorFovGfx.setShow(new ConstantCesiumProperty<>(show));
+
+//        sensorFovGfx.setPortionToDisplay(new ConstantCesiumProperty<CesiumSensorVolumePortionToDisplay>
+//        (CesiumSensorVolumePortionToDisplay.BELOW_ELLIPSOID_HORIZON));
+//        sensorFovGfx.setShow(new ConstantCesiumProperty<Boolean>(true));
+//        sensorFovGfx.setShowIntersection(new ConstantCesiumProperty<Boolean>(theShowIntersection));
+//        sensorFovGfx.setIntersectionColor(new ConstantCesiumProperty<Color>(colorWithAlpha));
+//        sensorFovGfx.setDomeSurfaceMaterial(new ConstantCesiumProperty<IMaterialGraphics>(dome));
+//        sensorFovGfx.setLateralSurfaceMaterial(new ConstantCesiumProperty<IMaterialGraphics>(lateral));
+//        sensorFovGfx.setEllipsoidHorizonSurfaceMaterial(new ConstantCesiumProperty<IMaterialGraphics>(lateral));
+//        sensorFovGfx.setEllipsoidSurfaceMaterial(new ConstantCesiumProperty<IMaterialGraphics>(lateral));
+
+        //Dome
+        GridMaterialGraphics dome = new GridMaterialGraphics();
+        dome.setColor(new ConstantCesiumProperty<Color>(theColor));
+        sensorFovGfx.setDomeSurfaceMaterial(new ConstantCesiumProperty<IMaterialGraphics>(dome));
+        // Hides the surface of the sphere/radius projecting outward.
+        //fovGraphics.setShowDomeSurfaces(new ConstantCesiumProperty<>(false));
+
+        //Lateral Surface
+        SolidColorMaterialGraphics lateral = new SolidColorMaterialGraphics();
+        lateral.setColor(new ConstantCesiumProperty<Color>(theColor));
+        sensorFovGfx.setLateralSurfaceMaterial(new ConstantCesiumProperty<IMaterialGraphics>(lateral));
+        return new FieldOfViewGraphicsExtension(sensorFovGfx);
+    }
+
 }

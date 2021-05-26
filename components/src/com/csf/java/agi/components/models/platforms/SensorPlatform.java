@@ -9,8 +9,10 @@ import agi.foundation.coordinates.AxisIndicator;
 import agi.foundation.coordinates.Cartesian;
 import agi.foundation.geometry.*;
 import agi.foundation.platforms.Platform;
-import com.csf.java.agi.components.models.platforms.CustomPlatform;
-import com.csf.java.agi.components.models.platforms.PlatformType;
+import com.csf.java.agi.components.utils.ExtensionGenerator;
+
+import java.awt.*;
+import java.util.Optional;
 
 /**
  * This class extends the Platform object to provide an easy to use implementation of a Sensor
@@ -18,8 +20,9 @@ import com.csf.java.agi.components.models.platforms.PlatformType;
 public class SensorPlatform extends CustomPlatform {
     private final EarthCentralBody earth = CentralBodiesFacet.getFromContext().getEarth();
 
-    public SensorPlatform(String theName) {
+    public SensorPlatform(String theName, Optional<Color> color) {
         super(theName);
+        ExtensionGenerator.updateAddOrRemoveFovGraphicsExtension(this, color.orElse(Color.RED), 1000, true);
     }
 
     public void setParentBasedLocation() {
@@ -70,14 +73,15 @@ public class SensorPlatform extends CustomPlatform {
         double elevation = Trig.degreesToRadians(theElevationDeg);
 
         Vector pointingVector = new VectorFixed(getOrientationAxes(),
-                new Cartesian(Math.cos(elevation) * Math.sin(azimuth),
-                        Math.cos(elevation) * Math.cos(azimuth),
-                        Math.sin(elevation)));
+                                                new Cartesian(Math.cos(elevation) * Math.sin(azimuth),
+                                                              Math.cos(elevation) * Math.cos(azimuth),
+                                                              Math.sin(elevation)));
 
         //* Once again, without more information the reference vector is mostly arbitrary.
         Vector eastVector = new VectorFixed(getOrientationAxes(), new Cartesian(1.0, 0.0, 0.0));
 
-        //* Constraint the Z-Axis to be along the pointing vector, and then tie the X-Axis as closed to our reference vector (Due East) as it can be.
+        //* Constraint the Z-Axis to be along the pointing vector, and then tie the X-Axis as closed to our reference vector (Due East)
+        // as it can be.
         Axes sensorAxes = new AxesAlignedConstrained(pointingVector, AxisIndicator.THIRD, eastVector, AxisIndicator.FIRST);
 
         setOrientationAxes(sensorAxes);
