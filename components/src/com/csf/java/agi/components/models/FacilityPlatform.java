@@ -7,83 +7,61 @@ import agi.foundation.cesium.*;
 import agi.foundation.cesium.advanced.IMaterialGraphics;
 import agi.foundation.coordinates.Cartesian;
 import agi.foundation.coordinates.Cartographic;
-import agi.foundation.coordinates.Rectangular;
 import agi.foundation.geometry.AxesNorthEastDown;
 import agi.foundation.geometry.PointCartographic;
-import agi.foundation.infrastructure.IdentifierExtension;
-import agi.foundation.platforms.Platform;
-
 import java.awt.*;
 
 /** This class extends the Platform object to provide an easy to use implementation of a Facility */
 public class FacilityPlatform extends CustomPlatform {
-    EarthCentralBody earth = CentralBodiesFacet.getFromContext().getEarth();
 
-    /**
-     * @param name   Facility Name
-     * @param latDeg Latitude in degrees of the facility location
-     * @param lonDeg Longitude in degrees of the facility location
-     * @param altMeters Height in meters of the facility location
-     */
     public FacilityPlatform(String name, double latDeg, double lonDeg, double altMeters) {
         super(name);
-        initialize(name, latDeg, lonDeg, altMeters);
+        initialize(latDeg, lonDeg, altMeters);
     }
 
-    /**
-     * @param name      Facility Name
-     * @param latDeg    Latitude in degrees of the facility location
-     * @param lonDeg    Longitude in degrees of the facility location
-     * @param altMeters    Height in meters of the facility location
-     * @param theColor     If not null a Cesium Label graphics extension and point graphics extension are automatically generated
-     * @param thePixelSize Pixel size of the cesium point graphics extension
-     */
-    public FacilityPlatform(String name, double latDeg, double lonDeg, double altMeters, Color theColor, Color theLabelColor, double thePixelSize) {
+    public FacilityPlatform(String name, double latDeg, double lonDeg, double altMeters, Color color, Color labelColor, double pixelSize) {
         super(name);
-        initialize(name, latDeg, lonDeg, altMeters);
-        if (theColor != null) {
-            this.addGfxLabelExtension(name, theLabelColor);
-            this.addPointGfxExtension(theColor, thePixelSize);
+        initialize(latDeg, lonDeg, altMeters);
+        if (color != null) {
+            this.addCesiumGfxLabelExtension(name, labelColor);
+            this.addCesiumPointGfxExtension(color, pixelSize);
         }
     }
 
-    public void addEllipseGfxExtension(Color theColor) {
+    @Override
+    public PlatformType getPlatformType() {
+        return PlatformType.FACILITY;
+    }
+
+    public void addCesiumEllipseGfxExtension(Color color) {
         EllipsoidGraphics ellipseGfx = new EllipsoidGraphics();
         ellipseGfx.setFill(new ConstantCesiumProperty<Boolean>(true));
         SolidColorMaterialGraphics material = new SolidColorMaterialGraphics();
-        material.setColor(new ConstantCesiumProperty<Color>(theColor));
+        material.setColor(new ConstantCesiumProperty<Color>(color));
         ellipseGfx.setMaterial(new ConstantCesiumProperty<IMaterialGraphics>(material));
         ellipseGfx.setRadii(new ConstantCesiumProperty<Cartesian>(new Cartesian(1000,1000,1000)));
 
         EllipsoidGraphicsExtension gfxExtension = new EllipsoidGraphicsExtension(ellipseGfx);
         this.getExtensions().add(gfxExtension);
     }
-    /**
-     * Adds Cesium Graphics Label Extension
-     * @param theLabel The Label text
-     */
-    public void addGfxLabelExtension(String theLabel, Color theColor) {
+
+    public void addCesiumGfxLabelExtension(String theLabel, Color color) {
         LabelGraphics gxLabel = new LabelGraphics();
         gxLabel.setText(new ConstantCesiumProperty<String>(theLabel));
-        gxLabel.setFillColor(new ConstantCesiumProperty<Color>(theColor));
-        gxLabel.setOutlineColor(new ConstantCesiumProperty<Color>(theColor));
+        gxLabel.setFillColor(new ConstantCesiumProperty<Color>(color));
+        gxLabel.setOutlineColor(new ConstantCesiumProperty<Color>(color));
         gxLabel.setOutlineWidth(new ConstantCesiumProperty<Double>(5.0));
         gxLabel.setHorizontalOrigin(new ConstantCesiumProperty<CesiumHorizontalOrigin>(CesiumHorizontalOrigin.CENTER));
         gxLabel.setVerticalOrigin(new ConstantCesiumProperty<CesiumVerticalOrigin>(CesiumVerticalOrigin.BOTTOM));
         this.getExtensions().add(new LabelGraphicsExtension(gxLabel));
     }
 
-    /**
-     * Adds Cesium Point Graphics Extension
-     * @param theColor     The Point color
-     * @param thePixelSize The desired pixel size of the point
-     */
-    public void addPointGfxExtension(Color theColor, double thePixelSize) {
+    public void addCesiumPointGfxExtension(Color color, double pixelSize) {
         PointGraphics gxPoint = new PointGraphics();
-        gxPoint.setColor(new ConstantCesiumProperty<Color>(theColor));
+        gxPoint.setColor(new ConstantCesiumProperty<Color>(color));
         gxPoint.setOutlineColor(new ConstantCesiumProperty<Color>(new Color(0x1e, 0x90, 0xff, 0x5f)));
         gxPoint.setOutlineWidth(new ConstantCesiumProperty<Double>(2.0));
-        gxPoint.setPixelSize(new ConstantCesiumProperty<Double>(thePixelSize));
+        gxPoint.setPixelSize(new ConstantCesiumProperty<Double>(pixelSize));
         gxPoint.setShow(new ConstantCesiumProperty<Boolean>(true));
         this.getExtensions().add(new PointGraphicsExtension(gxPoint));
     }
@@ -97,17 +75,12 @@ public class FacilityPlatform extends CustomPlatform {
 //        this.getExtensions().add(new AzimuthElevationMaskGraphicsExtension(gxFan));
     }
 
-    private void initialize(String theName, double theLatDeg, double theLonDeg, double theHeight) {
-        this.getExtensions().add(new IdentifierExtension("/Scenario/Facility/" + theName));
-        double longitude = Trig.degreesToRadians(theLonDeg);
-        double latitude = Trig.degreesToRadians(theLatDeg);
-        this.setLocationPoint(new PointCartographic(earth, new Cartographic(longitude, latitude, theHeight)));
-        //this.setOrientationAxes(Axes.getRoot());
+    private void initialize(double latDeg, double lonDeg, double altMeters) {
+        double longitude = Trig.degreesToRadians(lonDeg);
+        double latitude = Trig.degreesToRadians(latDeg);
+        this.setLocationPoint(new PointCartographic(earth, new Cartographic(longitude, latitude, altMeters)));
         this.setOrientationAxes(new AxesNorthEastDown(earth, this.getLocationPoint()));
     }
 
-    @Override
-    public PlatformType getPlatformType() {
-        return PlatformType.FACILITY;
-    }
+
 }

@@ -7,11 +7,9 @@ import agi.foundation.propagators.Sgp4Propagator;
 import agi.foundation.propagators.TwoLineElementSet;
 
 import java.awt.*;
-import java.net.URI;
-import java.util.Map;
 
 /** This class extends the Platform object to provide an easy to use implementation of a Satellite */
-public class SatellitePlatform extends Vehicle {
+public class SatellitePlatform extends PropagatedPlatform {
     private final int sscNum;
     private TwoLineElementSet tle = null;
 
@@ -25,8 +23,8 @@ public class SatellitePlatform extends Vehicle {
         super(theName);
         updateTLE(tleSet);
         sscNum = tleSet.getElementNumber();
-        if (theLabelColor != null) this.addGfxLabelExtension(theName, theLabelColor);
-        if (theOrbitLineColor != null) this.addOrbitGraphicsExtension(theOrbitLineColor);
+        if (theLabelColor != null) this.addCesiumGfxLabelExtension(theName, theLabelColor);
+        if (theOrbitLineColor != null) this.addCesiumOrbitGraphicsExtension(theOrbitLineColor);
     }
 
     @Override
@@ -34,8 +32,13 @@ public class SatellitePlatform extends Vehicle {
         return PlatformType.SATELLITE;
     }
 
-    public int getSSC() { return sscNum; }
-    public TwoLineElementSet getTLE() { return tle; }
+    public int getSSC() {
+        return sscNum;
+    }
+
+    public TwoLineElementSet getTLE() {
+        return new TwoLineElementSet(tle.toTleString());
+    }
 
     public void updateTLE(TwoLineElementSet tle) {
         if (tle == null) {
@@ -51,42 +54,7 @@ public class SatellitePlatform extends Vehicle {
         this.setOrientationAxes(vvlh);
     }
 
-    public Map<String, SensorPlatform> getSensors() {
-        return m_Sensors;
-    }
-
-    /** Adds an existing SensorPlatform to be attached to this satellite */
-    public void addSensorPlatform(SensorPlatform sensorPlatform) {
-        if (sensorPlatform != null) {
-            m_Sensors.put(sensorPlatform.getId(), sensorPlatform);
-        }
-    }
-
-
-    /**
-     * Adds a Cesium model graphics extension to this satellite using the model located at the provided path
-     * @param theModelPath File path to the desired Cesium model
-     */
-    public void addModelGraphicsExtension(String theModelPath) {
-        ModelGraphics gxModel = new ModelGraphics();
-        try {
-            URI modelUri = new URI(theModelPath);
-            CesiumResource model = new CesiumResource(modelUri, CesiumResourceBehavior.LINK_TO);
-            gxModel.setModel(new ConstantCesiumProperty<CesiumResource>(model));
-            gxModel.setScale(new ConstantCesiumProperty<Double>(400.0));
-            gxModel.setShow(new ConstantCesiumProperty<Boolean>(true));
-
-            this.getExtensions().add(new ModelGraphicsExtension(gxModel));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Sets up PathGraphics to represent orbit path graphics in Cesium
-     * @param theColor The Color of the orbit path line
-     */
-    public void addOrbitGraphicsExtension(Color theColor) {
+    public void addCesiumOrbitGraphicsExtension(Color theColor) {
         PolylineOutlineMaterialGraphics material = new PolylineOutlineMaterialGraphics();
         material.setColor(new ConstantCesiumProperty<Color>(theColor));
         material.setOutlineColor(new ConstantCesiumProperty<Color>(theColor));
