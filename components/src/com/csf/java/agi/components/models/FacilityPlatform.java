@@ -20,29 +20,29 @@ public class FacilityPlatform extends CustomPlatform {
     EarthCentralBody earth = CentralBodiesFacet.getFromContext().getEarth();
 
     /**
-     * @param theName   Facility Name
-     * @param theLatDeg Latitude in degrees of the facility location
-     * @param theLonDeg Longitude in degrees of the facility location
-     * @param theHeight Height in meters of the facility location
+     * @param name   Facility Name
+     * @param latDeg Latitude in degrees of the facility location
+     * @param lonDeg Longitude in degrees of the facility location
+     * @param altMeters Height in meters of the facility location
      */
-    public FacilityPlatform(String theName, double theLatDeg, double theLonDeg, double theHeight) {
-        super(theName);
-        initialize(theName, theLatDeg, theLonDeg, theHeight);
+    public FacilityPlatform(String name, double latDeg, double lonDeg, double altMeters) {
+        super(name);
+        initialize(name, latDeg, lonDeg, altMeters);
     }
 
     /**
-     * @param theName      Facility Name
-     * @param theLatDeg    Latitude in degrees of the facility location
-     * @param theLonDeg    Longitude in degrees of the facility location
-     * @param theHeight    Height in meters of the facility location
+     * @param name      Facility Name
+     * @param latDeg    Latitude in degrees of the facility location
+     * @param lonDeg    Longitude in degrees of the facility location
+     * @param altMeters    Height in meters of the facility location
      * @param theColor     If not null a Cesium Label graphics extension and point graphics extension are automatically generated
      * @param thePixelSize Pixel size of the cesium point graphics extension
      */
-    public FacilityPlatform(String theName, double theLatDeg, double theLonDeg, double theHeight, Color theColor, Color theLabelColor, double thePixelSize) {
-        super(theName);
-        initialize(theName, theLatDeg, theLonDeg, theHeight);
+    public FacilityPlatform(String name, double latDeg, double lonDeg, double altMeters, Color theColor, Color theLabelColor, double thePixelSize) {
+        super(name);
+        initialize(name, latDeg, lonDeg, altMeters);
         if (theColor != null) {
-            this.addGfxLabelExtension(theName, theLabelColor);
+            this.addGfxLabelExtension(name, theLabelColor);
             this.addPointGfxExtension(theColor, thePixelSize);
         }
     }
