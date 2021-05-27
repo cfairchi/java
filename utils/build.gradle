@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+group = 'com.csf.java.utils'
+version = '0.0.1'
+sourceCompatibility = '11'
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':java-models')
+    implementation 'com.google.guava:guava:30.1.1-jre'
+}

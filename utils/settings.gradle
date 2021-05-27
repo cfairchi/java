@@ -1,0 +1,3 @@
+rootProject.name = 'java-utils'
+include('java-models')
+project(':java-models').projectDir = new File('../models')

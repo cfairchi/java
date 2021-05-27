@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.csf.java.agi.components.service.AgiComponentsServiceAppl
+ ication
+
